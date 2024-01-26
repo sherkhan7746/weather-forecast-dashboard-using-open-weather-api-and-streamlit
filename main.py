@@ -11,19 +11,19 @@ option = st.selectbox("Select data to view", ("Temperature","Sky"))
 st.subheader(f"{option} for the next {days} days in {place}")
 
 
-col1, col2, col3 = st.columns([1.5,1.5,1.5])
-
-if place:
-    filtered_data = get_data(place, days)
-    if option == "Temperature":
-        temperatures = [data["main"]["temp"] for data in filtered_data]
-        dates = [data["dt_txt"] for data in filtered_data]
-        figure = px.line(x=dates, y=temperatures, labels={"x": "Dates", "y": "Temperature (c)"})
-        st.plotly_chart(figure)
-    if option == "Sky":
-        sky_condition = [data["weather"][0]["main"] for data in filtered_data]
-        path = [f"images/{sky.lower()}.png" for sky in sky_condition]
-        st.image(path, width=115)
-
+try:
+    if place:
+        filtered_data = get_data(place, days)
+        if option == "Temperature":
+            temperatures = [data["main"]["temp"] - 273.15 for data in filtered_data]
+            dates = [data["dt_txt"] for data in filtered_data]
+            figure = px.line(x=dates, y=temperatures, labels={"x": "Dates", "y": "Temperature (c)"})
+            st.plotly_chart(figure)
+        if option == "Sky":
+            sky_condition = [data["weather"][0]["main"] for data in filtered_data]
+            path = [f"images/{sky.lower()}.png" for sky in sky_condition]
+            st.image(path, width=115)
+except KeyError:
+    st.info("Please enter a valid place")
 
 
