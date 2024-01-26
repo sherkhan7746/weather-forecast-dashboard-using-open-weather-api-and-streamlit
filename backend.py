@@ -14,4 +14,4 @@ def get_data(place, forecast_days):
 
 
 if __name__ == "__main__":
-    print(get_data("karachi",1,"Sky"))
+    print(get_data("karachi",1))
